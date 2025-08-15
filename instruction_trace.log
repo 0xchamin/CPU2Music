@@ -1,0 +1,5 @@
+Breakpoint 1 at 0x100003bc4: file name_processor.c, line 7.
+Breakpoint set at process_name function
+Python Exception <class 'gdb.error'>: Don't know how to run.  Try "help target".
+gdb_script.txt:8: Error in sourced command file:
+Error occurred in Python: Don't know how to run.  Try "help target".

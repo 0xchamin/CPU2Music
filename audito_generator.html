@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPU Trace Audio Generator</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+            color: #00ff00;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+            margin-bottom: 30px;
+        }
+        
+        .upload-section {
+            background: rgba(0, 50, 0, 0.5);
+            border: 1px solid #00aa00;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .control-group {
+            background: rgba(0, 0, 50, 0.3);
+            border: 1px solid #0066ff;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        
+        .control-group h3 {
+            margin-top: 0;
+            color: #ffff00;
+        }
+        
+        input, select, button {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            width: 100%;
+            margin: 5px 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #003300, #006600);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            background: linear-gradient(45deg, #006600, #00aa00);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+        
+        button:disabled {
+            background: #333;
+            color: #666;
+            cursor: not-allowed;
+        }
+        
+        .visualization {
+            background: black;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            height: 200px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: rgba(0, 100, 0, 0.3);
+            height: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #00ff00, #00aa00);
+            height: 100%;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .cpu-info {
+            background: rgba(20, 20, 0, 0.5);
+            border: 1px solid #ffff00;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            font-size: 12px;
+        }
+        
+        .instruction-display {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ff6600;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+            height: 100px;
+            overflow-y: auto;
+            font-size: 11px;
+        }
+        
+        .note-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin: 2px;
+            border-radius: 50%;
+            border: 1px solid #00ff00;
+            animation: pulse 0.5s ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); background: rgba(0, 255, 0, 0.3); }
+            50% { transform: scale(1.2); background: rgba(0, 255, 0, 0.8); }
+            100% { transform: scale(1); background: rgba(0, 255, 0, 0.3); }
+        }
+        
+        .error {
+            color: #ff4444;
+            background: rgba(50, 0, 0, 0.5);
+            border: 1px solid #ff4444;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .success {
+            color: #44ff44;
+            background: rgba(0, 50, 0, 0.5);
+            border: 1px solid #44ff44;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 CPU TRACE AUDIO GENERATOR 🎵</h1>
+        <p style="text-align: center; color: #aaaaaa;">
+            Convert actual CPU instructions from name processing into music
+        </p>
+        
+        <div class="upload-section">
+            <h3>📁 Load CPU Trace Data</h3>
+            <input type="file" id="traceFileInput" accept=".json" />
+            <p style="color: #888; font-size: 12px;">
+                Upload the musical_data.json file generated by trace_to_music.py
+            </p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h3>🎼 Playback Controls</h3>
+                <button id="playBtn">▶️ Play CPU Music</button>
+                <button id="pauseBtn" disabled>⏸️ Pause</button>
+                <button id="stopBtn" disabled>⏹️ Stop</button>
+                <button id="downloadBtn" disabled>💾 Download WAV</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>⚙️ Audio Settings</h3>
+                <label>Master Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="50" />
+                <label>Playback Speed:</label>
+                <input type="range" id="speedSlider" min="0.5" max="2" step="0.1" value="1" />
+            </div>
+            
+            <div class="control-group">
+                <h3>🎹 Instrument Mix</h3>
+                <label>CPU Oscillator:</label>
+                <select id="waveformSelect">
+                    <option value="sine">Sine Wave</option>
+                    <option value="square">Square Wave</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+                <label>Reverb:</label>
+                <input type="range" id="reverbSlider" min="0" max="100" value="30" />
+            </div>
+        </div>
+        
+        <div class="cpu-info" id="cpuInfo">
+            <h3>💻 CPU Trace Information</h3>
+            <div id="traceStats">No trace data loaded</div>
+        </div>
+        
+        <div class="visualization" id="audioVisualization">
+            <canvas id="visualCanvas" width="800" height="200"></canvas>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="instruction-display" id="instructionDisplay">
+            <div style="color: #888;">CPU instructions will appear here during playback...</div>
+        </div>
+        
+        <div id="messageArea"></div>
+    </div>
+
+    <script>
+        class CPUTraceAudioGenerator {
+            constructor() {
+                this.audioContext = null;
+                this.traceData = null;
+                this.isPlaying = false;
+                this.currentNoteIndex = 0;
+                this.playbackStartTime = 0;
+                this.scheduledNotes = [];
+                this.analyser = null;
+                this.visualCanvas = null;
+                this.visualContext = null;
+                this.animationFrame = null;
+                
+                this.noteFrequencies = {
+                    'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+                    'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+                    'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46,
+                    'G5': 783.99, 'A5': 880.00, 'B5': 987.77, 'C6': 1046.50
+                };
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.initializeVisualization();
+            }
+            
+            initializeElements() {
+                this.elements = {
+                    traceFileInput: document.getElementById('traceFileInput'),
+                    playBtn: document.getElementById('playBtn'),
+                    pauseBtn: document.getElementById('pauseBtn'),
+                    stopBtn: document.getElementById('stopBtn'),
+                    downloadBtn: document.getElementById('downloadBtn'),
+                    volumeSlider: document.getElementById('volumeSlider'),
+                    speedSlider: document.getElementById('speedSlider'),
+                    waveformSelect: document.getElementById('waveformSelect'),
+                    reverbSlider: document.getElementById('reverbSlider'),
+                    cpuInfo: document.getElementById('cpuInfo'),
+                    traceStats: document.getElementById('traceStats'),
+                    progressFill: document.getElementById('progressFill'),
+                    instructionDisplay: document.getElementById('instructionDisplay'),
+                    messageArea: document.getElementById('messageArea')
+                };
+            }
+            
+            setupEventListeners() {
+                this.elements.traceFileInput.addEventListener('change', (e) => this.loadTraceFile(e));
+                this.elements.playBtn.addEventListener('click', () => this.playMusic());
+                this.elements.pauseBtn.addEventListener('click', () => this.pauseMusic());
+                this.elements.stopBtn.addEventListener('click', () => this.stopMusic());
+                this.elements.downloadBtn.addEventListener('click', () => this.downloadAudio());
+                this.elements.volumeSlider.addEventListener('input', (e) => this.updateVolume(e.target.value));
+                this.elements.speedSlider.addEventListener('input', (e) => this.updateSpeed(e.target.value));
+            }
+            
+            initializeVisualization() {
+                this.visualCanvas = document.getElementById('visualCanvas');
+                this.visualContext = this.visualCanvas.getContext('2d');
+                this.visualCanvas.width = this.visualCanvas.offsetWidth;
+                this.visualCanvas.height = this.visualCanvas.offsetHeight;
+            }
+            
+            async loadTraceFile(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                try {
+                    const text = await file.text();
+                    this.traceData = JSON.parse(text);
+                    this.displayTraceInfo();
+                    this.showMessage('CPU trace data loaded successfully!', 'success');
+                    this.elements.playBtn.disabled = false;
+                } catch (error) {
+                    this.showMessage('Error loading trace file: ' + error.message, 'error');
+                }
+            }
+            
+            displayTraceInfo() {
+                if (!this.traceData) return;
+                
+                const stats = `
+                    <strong>Tempo:</strong> ${this.traceData.tempo} BPM<br>
+                    <strong>Key:</strong> ${this.traceData.key} major<br>
+                    <strong>Total Notes:</strong> ${this.traceData.notes.length}<br>
+                    <strong>Instructions Traced:</strong> ${this.traceData.metadata?.total_instructions || 'Unknown'}<br>
+                    <strong>Unique Instruments:</strong> ${[...new Set(this.traceData.instruments)].length}
+                `;
+                
+                this.elements.traceStats.innerHTML = stats;
+            }
+            
+            async initializeAudioContext() {
+                if (!this.audioContext) {
+                    this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    
+                    // Create analyser for visualization
+                    this.analyser = this.audioContext.createAnalyser();
+                    this.analyser.fftSize = 256;
+                    this.analyser.connect(this.audioContext.destination);
+                    
+                    // Create master gain node
+                    this.masterGain = this.audioContext.createGain();
+                    this.masterGain.connect(this.analyser);
+                    this.updateVolume(this.elements.volumeSlider.value);
+                }
+                
+                if (this.audioContext.state === 'suspended') {
+                    await this.audioContext.resume();
+                }
+            }
+            
+            async playMusic() {
+                if (!this.traceData) {
+                    this.showMessage('Please load a CPU trace file first', 'error');
+                    return;
+                }
+                
+                await this.initializeAudioContext();
+                
+                this.isPlaying = true;
+                this.currentNoteIndex = 0;
+                this.playbackStartTime = this.audioContext.currentTime;
+                
+                this.elements.playBtn.disabled = true;
+                this.elements.pauseBtn.disabled = false;
+                this.elements.stopBtn.disabled = false;
+                
+                this.scheduleNotes();
+                this.startVisualization();
+                this.updateProgress();
+                
+                this.showMessage('Playing CPU-generated music...', 'success');
+            }
+            
+            scheduleNotes() {
+                const speed = parseFloat(this.elements.speedSlider.value);
+                const beatDuration = 60 / (this.traceData.tempo * speed);
+                
+                for (let i = 0; i < this.traceData.notes.length; i++) {
+                    const note = this.traceData.notes[i];
+                    const rhythm = this.traceData.rhythms[i];
+                    const instrument = this.traceData.instruments[i];
+                    
+                    const startTime = this.playbackStartTime + (i * beatDuration);
+                    const duration = rhythm * beatDuration;
+                    
+                    this.scheduleNote(note, startTime, duration, instrument);
+                }
+            }
+            
+            scheduleNote(note, startTime, duration, instrument) {
+                const frequency = this.noteFrequencies[note] || 440;
+                const waveform = this.elements.waveformSelect.value;
+                
+                // Create oscillator
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.type = waveform;
+                oscillator.frequency.setValueAtTime(frequency, startTime);
+                
+                // Envelope
+                gainNode.gain.setValueAtTime(0, startTime);
+                gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.1, startTime + duration * 0.7);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+                
+                // Connect nodes
+                oscillator.connect(gainNode);
+                gainNode.connect(this.masterGain);
+                
+                // Schedule playback
+                oscillator.start(startTime);
+                oscillator.stop(startTime + duration);
+                
+                // Schedule instruction display update
+                setTimeout(() => {
+                    if (this.isPlaying) {
+                        this.updateInstructionDisplay(note, instrument);
+                    }
+                }, (startTime - this.audioContext.currentTime) * 1000);
+                
+                this.scheduledNotes.push({oscillator, gainNode});
+            }
+            
+            updateInstructionDisplay(note, instrument) {
+                const display = this.elements.instructionDisplay;
+                const noteDiv = document.createElement('div');
+                noteDiv.innerHTML = `
+                    <span style="color: #00ff00;">${this.audioContext.currentTime.toFixed(2)}s</span> - 
+                    <span style="color: #ffff00;">NOTE: ${note}</span> - 
+                    <span style="color: #00aaff;">INSTRUMENT: ${instrument}</span>
+                    <span class="note-indicator"></span>
+                `;
+                display.appendChild(noteDiv);
+                display.scrollTop = display.scrollHeight;
+                
+                // Keep only last 10 entries
+                while (display.children.length > 10) {
+                    display.removeChild(display.firstChild);
+                }
+            }
+            
+            pauseMusic() {
+                this.isPlaying = false;
+                this.audioContext.suspend();
+                
+                this.elements.playBtn.disabled = false;
+                this.elements.pauseBtn.disabled = true;
+                
+                this.showMessage('Playback paused', 'success');
+            }
+            
+            stopMusic() {
+                this.isPlaying = false;
+                this.currentNoteIndex = 0;
+                
+                // Stop all scheduled notes
+                this.scheduledNotes.forEach(({oscillator}) => {
+                    try {
+                        oscillator.stop();
+                    } catch (e) {
+                        // Already stopped
+                    }
+                });
+                this.scheduledNotes = [];
+                
+                if (this.audioContext) {
+                    this.audioContext.suspend();
+                }
+                
+                this.elements.playBtn.disabled = false;
+                this.elements.pauseBtn.disabled = true;
+                this.elements.stopBtn.disabled = true;
+                
+                this.elements.progressFill.style.width = '0%';
+                this.elements.instructionDisplay.innerHTML = '<div style="color: #888;">Playback stopped</div>';
+                
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                }
+                
+                this.showMessage('Playback stopped', 'success');
+            }
+            
+            updateProgress() {
+                if (!this.isPlaying || !this.traceData) return;
+                
+                const currentTime = this.audioContext.currentTime - this.playbackStartTime;
+                const totalDuration = this.traceData.notes.length * (60 / this.traceData.tempo);
+                const progress = Math.min((currentTime / totalDuration) * 100, 100);
+                
+                this.elements.progressFill.style.width = progress + '%';
+                
+                if (progress >= 100) {
+                    this.stopMusic();
+                    this.showMessage('Playback complete!', 'success');
+                    return;
+                }
+                
+                setTimeout(() => this.updateProgress(), 100);
+            }
+            
+            startVisualization() {
+                if (!this.analyser) return;
+                
+                const draw = () => {
+                    if (!this.isPlaying) return;
+                    
+                    const bufferLength = this.analyser.frequencyBinCount;
+                    const dataArray = new Uint8Array(bufferLength);
+                    this.analyser.getByteFrequencyData(dataArray);
+                    
+                    this.visualContext.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                    this.visualContext.fillRect(0, 0, this.visualCanvas.width, this.visualCanvas.height);
+                    
+                    const barWidth = (this.visualCanvas.width / bufferLength) * 2.5;
+                    let barHeight;
+                    let x = 0;
+                    
+                    for (let i = 0; i < bufferLength; i++) {
+                        barHeight = (dataArray[i] / 255) * this.visualCanvas.height;
+                        
+                        const hue = (i / bufferLength) * 360;
+                        this.visualContext.fillStyle = `hsl(${hue}, 100%, 50%)`;
+                        this.visualContext.fillRect(x, this.visualCanvas.height - barHeight, barWidth, barHeight);
+                        
+                        x += barWidth + 1;
+                    }
+                    
+                    this.animationFrame = requestAnimationFrame(draw);
+                };
+                
+                draw();
+            }
+            
+            updateVolume(value) {
+                if (this.masterGain) {
+                    this.masterGain.gain.setValueAtTime(value / 100, this.audioContext.currentTime);
+                }
+            }
+            
+            updateSpeed(value) {
+                // Speed changes will take effect on next playback
+                this.showMessage(`Playback speed set to ${value}x`, 'success');
+            }
+            
+            async downloadAudio() {
+                this.showMessage('Audio download feature coming soon!', 'success');
+            }
+            
+            showMessage(message, type = 'success') {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = type;
+                messageDiv.textContent = message;
+                
+                this.elements.messageArea.appendChild(messageDiv);
+                
+                setTimeout(() => {
+                    if (messageDiv.parentNode) {
+                        messageDiv.parentNode.removeChild(messageDiv);
+                    }
+                }, 3000);
+            }
+        }
+        
+        // Initialize the audio generator when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new CPUTraceAudioGenerator();
+        });
+    </script>
+</body>
+</html>

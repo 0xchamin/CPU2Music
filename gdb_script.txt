@@ -1,0 +1,11 @@
+# Load the Python tracer
+source gdb_tracer.py
+
+# Set the program arguments
+set args "Chamin Nalinda Lokugam Hewage"
+
+# Start tracing
+trace-name
+
+# Quit GDB
+quit

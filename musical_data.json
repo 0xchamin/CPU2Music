@@ -1,0 +1,393 @@
+{
+  "tempo": 410,
+  "key": "C",
+  "notes": [
+    "G4",
+    "B4",
+    "B4",
+    "G4",
+    "C4",
+    "A4",
+    "G4",
+    "D4",
+    "B4",
+    "F4",
+    "C4",
+    "A4",
+    "E4",
+    "B4",
+    "G4",
+    "B4",
+    "B4",
+    "E4",
+    "A4",
+    "A4",
+    "B4",
+    "G4",
+    "G4",
+    "E4",
+    "F4",
+    "C4",
+    "B4",
+    "A4",
+    "F4"
+  ],
+  "rhythms": [
+    0.5,
+    0.25,
+    0.5,
+    0.5,
+    0.5,
+    0.25,
+    0.25,
+    0.25,
+    0.5,
+    0.25,
+    0.5,
+    0.25,
+    0.25,
+    0.5,
+    0.25,
+    0.25,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.25,
+    0.25,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "instruments": [
+    "guitar",
+    "violin",
+    "guitar",
+    "guitar",
+    "piano",
+    "violin",
+    "violin",
+    "piano",
+    "guitar",
+    "piano",
+    "piano",
+    "violin",
+    "guitar",
+    "guitar",
+    "violin",
+    "guitar",
+    "piano",
+    "violin",
+    "piano",
+    "guitar",
+    "guitar",
+    "guitar",
+    "violin",
+    "piano",
+    "violin",
+    "violin",
+    "guitar",
+    "guitar",
+    "violin"
+  ],
+  "metadata": {
+    "total_instructions": 29,
+    "name_processed": "Chamin Nalinda Lokugam Hewage"
+  },
+  "raw_instructions": [
+    {
+      "step": 0,
+      "pc": "0x555555555000",
+      "instruction": "mov $67,%eax",
+      "registers": {
+        "rax": "0x43",
+        "rbx": "0x86",
+        "rcx": "0xc9"
+      }
+    },
+    {
+      "step": 1,
+      "pc": "0x555555555004",
+      "instruction": "add $104,%ebx",
+      "registers": {
+        "rax": "0x68",
+        "rbx": "0xd0",
+        "rcx": "0x138"
+      }
+    },
+    {
+      "step": 2,
+      "pc": "0x555555555008",
+      "instruction": "mov $97,%eax",
+      "registers": {
+        "rax": "0x61",
+        "rbx": "0xc2",
+        "rcx": "0x123"
+      }
+    },
+    {
+      "step": 3,
+      "pc": "0x55555555500c",
+      "instruction": "add $109,%ebx",
+      "registers": {
+        "rax": "0x6d",
+        "rbx": "0xda",
+        "rcx": "0x147"
+      }
+    },
+    {
+      "step": 4,
+      "pc": "0x555555555010",
+      "instruction": "mov $105,%eax",
+      "registers": {
+        "rax": "0x69",
+        "rbx": "0xd2",
+        "rcx": "0x13b"
+      }
+    },
+    {
+      "step": 5,
+      "pc": "0x555555555014",
+      "instruction": "add $110,%ebx",
+      "registers": {
+        "rax": "0x6e",
+        "rbx": "0xdc",
+        "rcx": "0x14a"
+      }
+    },
+    {
+      "step": 6,
+      "pc": "0x555555555018",
+      "instruction": "mov $32,%eax",
+      "registers": {
+        "rax": "0x20",
+        "rbx": "0x40",
+        "rcx": "0x60"
+      }
+    },
+    {
+      "step": 7,
+      "pc": "0x55555555501c",
+      "instruction": "add $78,%ebx",
+      "registers": {
+        "rax": "0x4e",
+        "rbx": "0x9c",
+        "rcx": "0xea"
+      }
+    },
+    {
+      "step": 8,
+      "pc": "0x555555555020",
+      "instruction": "mov $97,%eax",
+      "registers": {
+        "rax": "0x61",
+        "rbx": "0xc2",
+        "rcx": "0x123"
+      }
+    },
+    {
+      "step": 9,
+      "pc": "0x555555555024",
+      "instruction": "add $108,%ebx",
+      "registers": {
+        "rax": "0x6c",
+        "rbx": "0xd8",
+        "rcx": "0x144"
+      }
+    },
+    {
+      "step": 10,
+      "pc": "0x555555555028",
+      "instruction": "mov $105,%eax",
+      "registers": {
+        "rax": "0x69",
+        "rbx": "0xd2",
+        "rcx": "0x13b"
+      }
+    },
+    {
+      "step": 11,
+      "pc": "0x55555555502c",
+      "instruction": "add $110,%ebx",
+      "registers": {
+        "rax": "0x6e",
+        "rbx": "0xdc",
+        "rcx": "0x14a"
+      }
+    },
+    {
+      "step": 12,
+      "pc": "0x555555555030",
+      "instruction": "mov $100,%eax",
+      "registers": {
+        "rax": "0x64",
+        "rbx": "0xc8",
+        "rcx": "0x12c"
+      }
+    },
+    {
+      "step": 13,
+      "pc": "0x555555555034",
+      "instruction": "add $97,%ebx",
+      "registers": {
+        "rax": "0x61",
+        "rbx": "0xc2",
+        "rcx": "0x123"
+      }
+    },
+    {
+      "step": 14,
+      "pc": "0x555555555038",
+      "instruction": "mov $32,%eax",
+      "registers": {
+        "rax": "0x20",
+        "rbx": "0x40",
+        "rcx": "0x60"
+      }
+    },
+    {
+      "step": 15,
+      "pc": "0x55555555503c",
+      "instruction": "add $76,%ebx",
+      "registers": {
+        "rax": "0x4c",
+        "rbx": "0x98",
+        "rcx": "0xe4"
+      }
+    },
+    {
+      "step": 16,
+      "pc": "0x555555555040",
+      "instruction": "mov $111,%eax",
+      "registers": {
+        "rax": "0x6f",
+        "rbx": "0xde",
+        "rcx": "0x14d"
+      }
+    },
+    {
+      "step": 17,
+      "pc": "0x555555555044",
+      "instruction": "add $107,%ebx",
+      "registers": {
+        "rax": "0x6b",
+        "rbx": "0xd6",
+        "rcx": "0x141"
+      }
+    },
+    {
+      "step": 18,
+      "pc": "0x555555555048",
+      "instruction": "mov $117,%eax",
+      "registers": {
+        "rax": "0x75",
+        "rbx": "0xea",
+        "rcx": "0x15f"
+      }
+    },
+    {
+      "step": 19,
+      "pc": "0x55555555504c",
+      "instruction": "add $103,%ebx",
+      "registers": {
+        "rax": "0x67",
+        "rbx": "0xce",
+        "rcx": "0x135"
+      }
+    },
+    {
+      "step": 20,
+      "pc": "0x555555555050",
+      "instruction": "mov $97,%eax",
+      "registers": {
+        "rax": "0x61",
+        "rbx": "0xc2",
+        "rcx": "0x123"
+      }
+    },
+    {
+      "step": 21,
+      "pc": "0x555555555054",
+      "instruction": "add $109,%ebx",
+      "registers": {
+        "rax": "0x6d",
+        "rbx": "0xda",
+        "rcx": "0x147"
+      }
+    },
+    {
+      "step": 22,
+      "pc": "0x555555555058",
+      "instruction": "mov $32,%eax",
+      "registers": {
+        "rax": "0x20",
+        "rbx": "0x40",
+        "rcx": "0x60"
+      }
+    },
+    {
+      "step": 23,
+      "pc": "0x55555555505c",
+      "instruction": "add $72,%ebx",
+      "registers": {
+        "rax": "0x48",
+        "rbx": "0x90",
+        "rcx": "0xd8"
+      }
+    },
+    {
+      "step": 24,
+      "pc": "0x555555555060",
+      "instruction": "mov $101,%eax",
+      "registers": {
+        "rax": "0x65",
+        "rbx": "0xca",
+        "rcx": "0x12f"
+      }
+    },
+    {
+      "step": 25,
+      "pc": "0x555555555064",
+      "instruction": "add $119,%ebx",
+      "registers": {
+        "rax": "0x77",
+        "rbx": "0xee",
+        "rcx": "0x165"
+      }
+    },
+    {
+      "step": 26,
+      "pc": "0x555555555068",
+      "instruction": "mov $97,%eax",
+      "registers": {
+        "rax": "0x61",
+        "rbx": "0xc2",
+        "rcx": "0x123"
+      }
+    },
+    {
+      "step": 27,
+      "pc": "0x55555555506c",
+      "instruction": "add $103,%ebx",
+      "registers": {
+        "rax": "0x67",
+        "rbx": "0xce",
+        "rcx": "0x135"
+      }
+    },
+    {
+      "step": 28,
+      "pc": "0x555555555070",
+      "instruction": "mov $101,%eax",
+      "registers": {
+        "rax": "0x65",
+        "rbx": "0xca",
+        "rcx": "0x12f"
+      }
+    }
+  ]
+}
